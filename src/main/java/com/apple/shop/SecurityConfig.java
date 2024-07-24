@@ -7,6 +7,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -17,16 +19,32 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+//  Csrf 기능을 사용하기 위해 필요한 Bean 객체
+    @Bean
+    public CsrfTokenRepository csrfTokenRepository() {
+        HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
+        repository.setHeaderName("X-XSRF-TOKEN");
+        return repository;
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf((csrf) -> csrf.disable());
+
+//        csrf 기능 키는 메소드.
+//        http.csrf(csrf -> csrf.csrfTokenRepository(csrfTokenRepository())
+//                .ignoringRequestMatchers("/login")
+//        );
+
         http.authorizeHttpRequests((authorize) ->
                 authorize.requestMatchers("/**").permitAll()
         );
+
         http.formLogin((formLogin) -> formLogin.loginPage("/login")
                 .defaultSuccessUrl("/")
 //                .failureUrl("/fail")
         );
+
         http.logout( logout -> logout.logoutUrl("/logout"));
         return http.build();
     }

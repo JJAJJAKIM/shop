@@ -1,12 +1,14 @@
 package com.apple.shop.member;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequiredArgsConstructor
@@ -35,12 +37,20 @@ public class MemberController {
         return "login.html";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/my-page")
     public String myPage(Authentication auth) {
-        if(auth.isAuthenticated()){
+        CustomUser result = (CustomUser)auth.getPrincipal();
+        System.out.println(result.displayName);
             return "mypage.html";
-        } else {
-            return "redirect:/login";
-        }
+    }
+
+    @GetMapping("/user/1")
+    @ResponseBody
+    public MemberDTO getMember() {
+        var a = memberRepository.findById(1L);
+        var result = a.get();
+        var data = new MemberDTO(result.getUsername(),result.getDisplayname());
+        return data;
     }
 }
