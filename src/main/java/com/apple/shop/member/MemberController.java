@@ -50,7 +50,7 @@ public class MemberController {
     public MemberDTO getMember() {
         var a = memberRepository.findById(1L);
         var result = a.get();
-        var data = new MemberDTO(result.getUsername(),result.getDisplayname());
+        var data = new MemberDTO(result.getId(), result.getUsername(),result.getDisplayname());
         return data;
     }
 }
