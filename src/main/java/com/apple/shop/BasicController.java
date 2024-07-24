@@ -13,6 +13,7 @@ public class BasicController {
     String hello(){
         return "index.html";
     }
+
     @GetMapping("/about")
     @ResponseBody
     String about() {
