@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.security.Principal;
+
 @Controller
 @RequiredArgsConstructor
 public class MemberController {
@@ -39,7 +41,7 @@ public class MemberController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/my-page")
-    public String myPage(Authentication auth) {
+    public String myPage(Authentication auth, Principal principal) {
         CustomUser result = (CustomUser)auth.getPrincipal();
         System.out.println(result.displayName);
             return "mypage.html";
@@ -54,3 +56,4 @@ public class MemberController {
         return data;
     }
 }
+

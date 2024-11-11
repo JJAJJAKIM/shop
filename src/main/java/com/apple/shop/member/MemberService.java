@@ -13,7 +13,7 @@ public class MemberService {
 
         var result = memberRepository.findByUsername(member.getUsername());
         if(result.isPresent()){
-            throw new Exception("이미 존재하는 아이디");
+            throw new Exception("이미 존재하는 아이디");  
         }
         if(member.getUsername().length() > 3 && member.getUsername().length() < 15){
             member = memberRepository.save(member);
