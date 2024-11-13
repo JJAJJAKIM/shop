@@ -18,6 +18,6 @@ public class Item {
     private String title; //public을 안붙이면 같은 폴더의 클래스에서만 가져다 쓸수 있다. protected 와 같다. 상속을 받으면 사용가능하다.
     private Integer price; // private를 쓰면 다른클래스에서 가져다 쓰지 못한다.
     // static을 쓰면 new 생성자를 안써도 된다.
-
+    private String username;
 
 }

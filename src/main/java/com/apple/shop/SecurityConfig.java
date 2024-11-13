@@ -45,7 +45,9 @@ public class SecurityConfig {
 //                .failureUrl("/fail")
         );
 
-        http.logout( logout -> logout.logoutUrl("/logout"));
+        http.logout( logout -> logout.logoutUrl("/logout")
+//                .logoutSuccessUrl("/login")
+        );
         return http.build();
     }
 }

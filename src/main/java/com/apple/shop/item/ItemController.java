@@ -2,6 +2,7 @@ package com.apple.shop.item;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,11 +19,10 @@ public class ItemController {
     private final ItemService itemService;
 
     @GetMapping("/list")
-        String list(Model model){
-
-            model.addAttribute("items", itemService.findItem());
+    String list(Model model){
+        model.addAttribute("items", itemService.findItem());
             return "list.html";
-        }
+    }
         
         // 상품 추가 기능
         // 1.상품, 가격 작성할 수 있는 페이지와 폼
@@ -30,32 +30,31 @@ public class ItemController {
         // 3. 서버는 검사후 db에 저장
 
    @GetMapping("/write")
-       String write(){
+   String write(){
             return "write.html";
        }
-   @PostMapping("/add")
-      String addPost(@ModelAttribute Item item){
 
+   @PostMapping("/add")
+   String addPost(@ModelAttribute Item item, Authentication auth){
+        item.setUsername(auth.getName());
         itemService.saveItem(item);
-       return "redirect:/list";
-      }
+        return "redirect:/list";
+    }
 
    @GetMapping ("/detail/{id:[0-9]*}")
-    String detail(@PathVariable Long id, Model model)  {
-
+   String detail(@PathVariable Long id, Model model)  {
         if (itemService.detailItem(id).isPresent()) {
             model.addAttribute("item", itemService.detailItem(id).get());
             return "detail.html";
         } else {
             return  "redirect:/list";
         }
-
     }
     // 1. 수정버튼 누르면 글 수정 페이지로
     // 2. 수정페이지엔 기존 내용이 채원진 폼 있음
     // 3. 전송 누르면 그걸로 DB 수정
     @GetMapping ("/edit/{id:[0-9]+}")
-     public String edit(@PathVariable Long id, Model model){
+    public String edit(@PathVariable Long id, Model model){
         if (itemService.detailItem(id).isPresent()) {
             model.addAttribute("item", itemService.detailItem(id).get());
             return "edit.html";

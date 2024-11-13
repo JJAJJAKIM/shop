@@ -21,7 +21,10 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/register")
-    public String register() {
+    public String register(Authentication auth) {
+        if (auth.isAuthenticated()) {
+            return "redirect:/list";
+        }
         return "register.html";
     }
 
