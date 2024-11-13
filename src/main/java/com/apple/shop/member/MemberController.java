@@ -16,6 +16,7 @@ import java.security.Principal;
 @RequiredArgsConstructor
 public class MemberController {
 
+    private final MemberMapper memberMapper;
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final MemberService memberService;
@@ -54,8 +55,7 @@ public class MemberController {
     @ResponseBody
     public MemberDTO getMember() {
         var a = memberRepository.findById(1L);
-        var result = a.get();
-        var data = new MemberDTO(result.getId(), result.getUsername(),result.getDisplayname());
+        MemberDTO data = memberMapper.memberToMemberDTO(a.orElseThrow(()-> new RuntimeException("그런 유저없다.")));
         return data;
     }
 }
