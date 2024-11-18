@@ -25,6 +25,11 @@
             ">🗑️</span>
         </div>
     </div>
+    <div th:each=" page, pageStat : ${totalPages}">
+        <a th:href="@{'/list/page/'+${pageStat.index}}">
+            <span th:text="${pageStat.index}+1"></span>
+        </a>
+    </div>
 
 
 <script>

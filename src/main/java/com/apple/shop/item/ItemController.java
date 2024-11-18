@@ -1,6 +1,9 @@
 package com.apple.shop.item;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.DoubleSummaryStatistics;
 import java.util.Map;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class ItemController {
@@ -85,6 +89,14 @@ public class ItemController {
         var result = new BCryptPasswordEncoder().encode("하잉하잉");
         System.out.println(result);
         return "redirect:/list";
+    }
+
+    @GetMapping("/list/page/{pageNo:[0-9]}")
+    String getListPage(Model model, @PathVariable Integer pageNo){
+        Page<Item> result = itemRepository.findAllBy(PageRequest.of(pageNo,5));
+        model.addAttribute("items", result);
+        model.addAttribute("totalPages", result.getTotalPages());
+        return "list.html";
     }
 
 }
