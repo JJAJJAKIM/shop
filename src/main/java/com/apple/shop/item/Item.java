@@ -19,5 +19,6 @@ public class Item {
     private Integer price; // private를 쓰면 다른클래스에서 가져다 쓰지 못한다.
     // static을 쓰면 new 생성자를 안써도 된다.
     private String username;
+    private String url;
 
 }

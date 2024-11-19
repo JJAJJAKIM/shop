@@ -12,7 +12,7 @@
     <div th:replace="~{ nav.html::navbar }"></div>
 
     <div class="card" th:each=" i : ${items}" >
-        <img src="http://placehold.co/300">
+        <img th:src="${i.url} ? ${i.url}: 'https://placehold.co/300'">
         <div>
             <h4 th:text="${i.title}"></h4>
             <p th:text="${i.price + '원'}"></p>
