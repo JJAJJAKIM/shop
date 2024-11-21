@@ -1,5 +1,6 @@
 package com.apple.shop.item;
 
+import com.apple.shop.comment.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ItemController {
 
+    private final CommentRepository commentRepository;
     private final ItemRepository itemRepository;
     private final ItemService itemService;
     private final S3Service s3Service;
@@ -50,6 +52,7 @@ public class ItemController {
    String detail(@PathVariable Long id, Model model)  {
         if (itemService.detailItem(id).isPresent()) {
             model.addAttribute("item", itemService.detailItem(id).get());
+            model.addAttribute("reviews", commentRepository.findAllByParentId(id));
             return "detail.html";
         } else {
             return  "redirect:/list";

@@ -18,6 +18,13 @@
             <p th:text="${item.price + '원'}"></p>
             <a th:href="@{'/edit/' + ${item.id}}">수정</a>
         </div>
+    <div class="reviews">
+        <h4>리뷰</h4>
+        <div th:each="i : ${reviews}">
+            <p th:text="${i.username}"></p>
+            <p th:text="${i.content}"></p>
+        </div>
+    </div>
     <form action="/addComment" method="post">
         <div>
             <input type="hidden" name= "parentId" th:value="${item.id}">
