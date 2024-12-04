@@ -3,6 +3,9 @@ package com.apple.shop.item;
 import com.apple.shop.comment.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +15,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.DoubleSummaryStatistics;
+import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -109,6 +114,13 @@ public class ItemController {
         var result = s3Service.createPresignedUrl("test/" + filename);
         System.out.println(result);
         return result;
+    }
+
+    @GetMapping("/search")
+    String postSearch(@RequestParam String searchText, Model model){
+        var result = itemRepository.findAllByTitleContains(searchText);
+        model.addAttribute("items", result);
+        return "list.html";
     }
 
 

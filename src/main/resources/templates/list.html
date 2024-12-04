@@ -10,6 +10,10 @@
 </head>
 <body>
     <div th:replace="~{ nav.html::navbar }"></div>
+    <form action="/search" method="GET">
+        <input name="searchText" style="display: inline">
+        <button>검색</button>
+    </form>
 
     <div class="card" th:each=" i : ${items}" >
         <img th:src="${i.url} ? ${i.url}: 'https://placehold.co/300'">

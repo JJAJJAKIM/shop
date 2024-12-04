@@ -9,6 +9,7 @@ import lombok.ToString;
 @ToString
 @Setter
 @Getter
+@Table(indexes = @Index(columnList = "title", name = "jpa_index"))
 public class Item {
     // 생성된 테이블에 들어갈 컬럼들 정의
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
