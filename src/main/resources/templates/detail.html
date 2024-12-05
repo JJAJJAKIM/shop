@@ -16,6 +16,7 @@
 
             <h4 th:text="${item.title}" ></h4>
             <p th:text="${item.price + '원'}"></p>
+            <a th:href="@{'/order?itemId=' + ${item.id}}">주문</a>
             <a th:href="@{'/edit/' + ${item.id}}">수정</a>
         </div>
     <div class="reviews">

@@ -1,6 +1,11 @@
 package com.apple.shop.item;
 
+import com.apple.shop.member.Member;
+import com.apple.shop.member.MemberRepository;
+import com.apple.shop.sales.Sales;
+import com.apple.shop.sales.SalesRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,6 +16,8 @@ import java.util.Optional;
 public class ItemService {
 
     private final ItemRepository itemRepository;
+    private final MemberRepository memberRepository;
+    private final SalesRepository salesRepository;
 
     public void saveItem(Item item){
         itemRepository.save(item);
@@ -35,6 +42,21 @@ public class ItemService {
        Item result = itemRepository.save(item);
 
         return result;
+    }
+
+    public Boolean orderItem(long id, Authentication auth){
+        if(id != 0 && auth != null ){
+            Item item = itemRepository.findById(id).orElse(null);
+            Member member = memberRepository.findByUsername(auth.getName()).orElse(null);
+            Sales data = new Sales();
+            data.setItemName(item.getTitle());
+            data.setPrice(item.getPrice());
+            data.setCount(1);
+            data.setMemberId(member.getId());
+            salesRepository.save(data);
+            return true;
+        }
+        return false;
     }
 
 }
