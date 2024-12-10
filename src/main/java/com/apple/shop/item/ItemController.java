@@ -123,14 +123,5 @@ public class ItemController {
         return "list.html";
     }
 
-    @GetMapping("/order")
-    String order(@RequestParam Long itemId, Authentication auth){
-        var result = itemService.orderItem(itemId, auth);
-        if(result){
-            return "redirect:/list";
-        }
-        return "redirect:/detail/" + itemId;
-    }
-
 
 }

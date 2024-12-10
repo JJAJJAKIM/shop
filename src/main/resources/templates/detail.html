@@ -16,9 +16,16 @@
 
             <h4 th:text="${item.title}" ></h4>
             <p th:text="${item.price + '원'}"></p>
-            <a th:href="@{'/order?itemId=' + ${item.id}}">주문</a>
             <a th:href="@{'/edit/' + ${item.id}}">수정</a>
         </div>
+    <div class="order">
+        <form action="/order" method="post">
+            <input name="title" th:value="${item.title}">
+            <input name="price" th:value="${item.price}">
+            <input name="count" placeholder="count">
+            <button type="submit">주문하기</button>
+        </form>
+    </div>
     <div class="reviews">
         <h4>리뷰</h4>
         <div th:each="i : ${reviews}">

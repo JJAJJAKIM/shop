@@ -44,19 +44,4 @@ public class ItemService {
         return result;
     }
 
-    public Boolean orderItem(long id, Authentication auth){
-        if(id != 0 && auth != null ){
-            Item item = itemRepository.findById(id).orElse(null);
-            Member member = memberRepository.findByUsername(auth.getName()).orElse(null);
-            Sales data = new Sales();
-            data.setItemName(item.getTitle());
-            data.setPrice(item.getPrice());
-            data.setCount(1);
-            data.setMemberId(member.getId());
-            salesRepository.save(data);
-            return true;
-        }
-        return false;
-    }
-
 }
