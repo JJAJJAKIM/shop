@@ -15,26 +15,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SalesController {
 
-    private final SalesRepository salesRepository;
+    private final SalesService salesService;
 
     @PostMapping("/order")
     String postOrder(@RequestParam String title, @RequestParam Integer price, @RequestParam Integer count, Authentication auth){
-        Sales sales = new Sales();
-        sales.setItemName(title);
-        sales.setPrice(price);
-        sales.setCount(count);
-        CustomUser user = (CustomUser) auth.getPrincipal();
-        var member = new Member();
-        member.setId((Long) user.id);
-        sales.setMember(member);
-        salesRepository.save(sales);
+        salesService.postOrder(title, price, count, auth);
         return "list.html";
     }
 
     @GetMapping("/order/all")
     String getOrderAll(){
-        List<Sales> result = salesRepository.findAll();
-        System.out.println(result.get(0));
+        var result = salesService.getOrderAll();
+        System.out.println(result);
         return "list.html";
     }
 }
