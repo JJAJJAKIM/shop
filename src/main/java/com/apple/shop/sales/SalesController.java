@@ -2,6 +2,7 @@ package com.apple.shop.sales;
 
 import com.apple.shop.member.CustomUser;
 import com.apple.shop.member.Member;
+import com.apple.shop.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,7 @@ import java.util.List;
 public class SalesController {
 
     private final SalesService salesService;
+    private final MemberRepository memberRepository;
 
     @PostMapping("/order")
     String postOrder(@RequestParam String title, @RequestParam Integer price, @RequestParam Integer count, Authentication auth){
@@ -27,6 +29,13 @@ public class SalesController {
     String getOrderAll(){
         var result = salesService.getOrderAll();
         System.out.println(result);
+        return "list.html";
+    }
+
+    @GetMapping("/order/one")
+    String getOrderOne(){
+        var result = memberRepository.findById(1L);
+        System.out.println(result.get().getSales());
         return "list.html";
     }
 }
