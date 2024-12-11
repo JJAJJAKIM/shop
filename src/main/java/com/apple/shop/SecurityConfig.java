@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -35,15 +36,18 @@ public class SecurityConfig {
 //        http.csrf(csrf -> csrf.csrfTokenRepository(csrfTokenRepository())
 //                .ignoringRequestMatchers("/login")
 //        );
+        http.sessionManagement((session) -> session
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        );
 
         http.authorizeHttpRequests((authorize) ->
                 authorize.requestMatchers("/**").permitAll()
         );
 
-        http.formLogin((formLogin) -> formLogin.loginPage("/login")
-                .defaultSuccessUrl("/my-page")
+//        http.formLogin((formLogin) -> formLogin.loginPage("/login")
+//                .defaultSuccessUrl("/my-page")
 //                .failureUrl("/fail")
-        );
+//        );
 
         http.logout( logout -> logout.logoutUrl("/logout")
 //                .logoutSuccessUrl("/login")
