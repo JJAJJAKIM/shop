@@ -1,5 +1,7 @@
 package com.apple.shop.member;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -64,13 +66,29 @@ public class MemberController {
 
     @PostMapping("/login/jwt")
     @ResponseBody
-    public String loginJWT(@RequestBody Map<String, String> data ){
+    public String loginJWT(@RequestBody Map<String, String> data , HttpServletResponse response){
 
         var authToken = new UsernamePasswordAuthenticationToken(data.get("username"), data.get("password"));
         var auth = authenticationManagerBuilder.getObject().authenticate(authToken);
 
         SecurityContextHolder.getContext().setAuthentication(auth);
-        return "";
+        var jwt = JwtUtil.createToken(SecurityContextHolder.getContext().getAuthentication());
+        System.out.println(jwt);
+
+        var cookie = new Cookie("jwt",jwt);
+        cookie.setMaxAge(10);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/"); // 쿠키가 전송될 경로
+        response.addCookie(cookie);
+
+        return jwt;
+    }
+
+    @GetMapping("/my-page/jwt")
+    @ResponseBody
+    public String myPageJWT(){
+
+        return "mypage-jwt";
     }
 }
 
