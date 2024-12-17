@@ -1,6 +1,7 @@
 package com.apple.shop.member;
 
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -76,7 +77,7 @@ public class MemberController {
         System.out.println(jwt);
 
         var cookie = new Cookie("jwt",jwt);
-        cookie.setMaxAge(10);
+        cookie.setMaxAge(60);
         cookie.setHttpOnly(true);
         cookie.setPath("/"); // 쿠키가 전송될 경로
         response.addCookie(cookie);
@@ -86,8 +87,11 @@ public class MemberController {
 
     @GetMapping("/my-page/jwt")
     @ResponseBody
-    public String myPageJWT(){
-
+    public String myPageJWT(Authentication auth){
+        var user = (CustomUser) auth.getPrincipal();
+        System.out.println(user);
+        System.out.println(user.displayName);
+        System.out.println(user.getAuthorities());
         return "mypage-jwt";
     }
 }
